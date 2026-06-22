@@ -7,4 +7,4 @@
 
 ## Motivation
 
-### I want to develop this helper to help my bride to learn korean language with me
+### I want to develop this helper to help learn Korean.
