@@ -57,4 +57,4 @@ jobs:
         run: poetry run python src/manage.py lintmigrations
 
       - name: Test with pytest
-        run: poetry run pytest
+        run: poetry run pytest --radar-endpoint='https://test-radar.ilaletdinov.ru' --radar-token='${{ secrets.RADAR_TOKEN }}'
