@@ -408,19 +408,15 @@ sqlparse = ">=0.2"
 
 [[package]]
 name = "django-extra-checks"
-version = "0.14.0"
+version = "0.17.0"
 description = "Collection of useful checks for Django Checks Framework"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "django_extra_checks-0.14.0-py3-none-any.whl", hash = "sha256:3e0d7413bac22eae7c26bf1b1be4eb7c7e5b86eb7eaa3f9c546c910553f6fbcf"},
-    {file = "django_extra_checks-0.14.0.tar.gz", hash = "sha256:1f3436d485ef23b0836afc6d7447b53bd64a088ba0a1a617d9500e876548fb77"},
+    {file = "django_extra_checks-0.17.0-py3-none-any.whl", hash = "sha256:f41e2e4455e5467aa9b3e28500d4d140b9fb9eedf5e42e0fb71498846813608a"},
+    {file = "django_extra_checks-0.17.0.tar.gz", hash = "sha256:619f79f37de23931d08539ed97b2b945c2887c73f753eccc98544ffd3f7d3e60"},
 ]
-
-[package.extras]
-dev = ["django", "django-stubs", "djangorestframework", "djangorestframework-stubs", "mypy", "pdbpp", "pre-commit", "ruff"]
-test = ["pytest", "pytest-cov", "pytest-django"]
 
 [[package]]
 name = "django-health-check"
@@ -2286,4 +2282,4 @@ cffi = ["cffi (>=1.17,<2.0) ; platform_python_implementation != \"PyPy\" and pyt
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "ae1f7093fafa4f348bba1db072933a6a614a62d46fb7bbfe861a13a6f1365448"
+content-hash = "d8874b7148f03acbe5884dac335894c7704e3da61c596d76aa3a8d909e24d393"
