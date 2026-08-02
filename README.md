@@ -8,3 +8,5 @@
 ## Motivation
 
 ### I want develop this helper to help learn Korean.
+
+쌤 - 선생님 - Teacher
