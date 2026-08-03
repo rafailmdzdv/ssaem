@@ -460,14 +460,14 @@ Django = ">=1.11"
 
 [[package]]
 name = "django-migration-linter"
-version = "5.1.0"
+version = "5.2.0"
 description = "Detect backward incompatible migrations for your django project"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "django-migration-linter-5.1.0.tar.gz", hash = "sha256:638a6f39b0109fb95a747f10cb3ae4362b4ca46e7f45eee9546d3dd4c322b83a"},
-    {file = "django_migration_linter-5.1.0-py3-none-any.whl", hash = "sha256:eefdca0cd60b0bacdf61420b0779b2c680dd29d3b43e9ccb0d8d2aa89f036474"},
+    {file = "django_migration_linter-5.2.0-py3-none-any.whl", hash = "sha256:db9ef2d7ba37179882a6f4849fd6277cd6d18613d66c34a4046db26a1f40601d"},
+    {file = "django_migration_linter-5.2.0.tar.gz", hash = "sha256:ba8b4d5aeacce9a2441c4d863321867eaeb498a873ac6657f91350f5b3119bc7"},
 ]
 
 [package.dependencies]
@@ -476,7 +476,7 @@ django = ">=2.2"
 toml = ">=0.10.2"
 
 [package.extras]
-test = ["coverage (>=7.2.7)", "django-add-default-value (>=0.4.0)", "mysqlclient (>=2.1.1)", "psycopg2 (>=2.9.6)", "tox (>=4.6.3)"]
+test = ["coverage (>=7.2.7)", "django_add_default_value (>=0.4.0)", "mysqlclient (>=2.1.1)", "psycopg2 (>=2.9.6)", "tox (>=4.6.3)"]
 
 [[package]]
 name = "django-permissions-policy"
