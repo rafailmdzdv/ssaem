@@ -5,29 +5,33 @@ This file is required and if development.py is present these
 values are overridden.
 """
 
+from dmr.settings import Settings
+
 from server.settings.components import config
+from server.settings.components.api import DMR_SETTINGS
 
 # Production flags:
-# https://docs.djangoproject.com/en/4.2/howto/deployment/
+# https://docs.djangoproject.com/en/6.0/howto/deployment/
 
 DEBUG = False
 
 ALLOWED_HOSTS = [
     # TODO: check production hosts
     config('DOMAIN_NAME'),
-
     # We need this value for `healthcheck` to work:
     'localhost',
 ]
 
 
 # Staticfiles
-# https://docs.djangoproject.com/en/4.2/ref/contrib/staticfiles/
+# https://docs.djangoproject.com/en/6.0/ref/contrib/staticfiles/
 
 # This is a hack to allow a special flag to be used with `--dry-run`
 # to test things locally.
 _COLLECTSTATIC_DRYRUN = config(
-    'DJANGO_COLLECTSTATIC_DRYRUN', cast=bool, default=False,
+    'DJANGO_COLLECTSTATIC_DRYRUN',
+    cast=bool,
+    default=False,
 )
 # Adding STATIC_ROOT to collect static files via 'collectstatic':
 STATIC_ROOT = '.static' if _COLLECTSTATIC_DRYRUN else '/var/www/django/static'
@@ -41,25 +45,25 @@ STATICFILES_STORAGE = (
 
 
 # Media files
-# https://docs.djangoproject.com/en/4.2/topics/files/
+# https://docs.djangoproject.com/en/6.0/topics/files/
 
 MEDIA_ROOT = '/var/www/django/media'
 
 
 # Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
 _PASS = 'django.contrib.auth.password_validation'  # noqa: S105
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': '{0}.UserAttributeSimilarityValidator'.format(_PASS)},
-    {'NAME': '{0}.MinimumLengthValidator'.format(_PASS)},
-    {'NAME': '{0}.CommonPasswordValidator'.format(_PASS)},
-    {'NAME': '{0}.NumericPasswordValidator'.format(_PASS)},
+    {'NAME': f'{_PASS}.UserAttributeSimilarityValidator'},
+    {'NAME': f'{_PASS}.MinimumLengthValidator'},
+    {'NAME': f'{_PASS}.CommonPasswordValidator'},
+    {'NAME': f'{_PASS}.NumericPasswordValidator'},
 ]
 
 
 # Security
-# https://docs.djangoproject.com/en/4.2/topics/security/
+# https://docs.djangoproject.com/en/6.0/topics/security/
 
 SECURE_HSTS_SECONDS = 31536000  # the same as Caddy has
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
@@ -74,3 +78,9 @@ SECURE_REDIRECT_EXEMPT = [
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+
+# django-modern-rest
+# https://django-modern-rest.rtfd.io
+
+DMR_SETTINGS[Settings.validate_responses] = False

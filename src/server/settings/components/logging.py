@@ -1,11 +1,14 @@
 # Logging
-# https://docs.djangoproject.com/en/4.2/topics/logging/
+# https://docs.djangoproject.com/en/6.0/topics/logging/
 
 # See also:
 # 'Do not log' by Nikita Sobolev (@sobolevn)
 # https://sobolevn.me/2020/03/do-not-log
 
-from typing import TYPE_CHECKING, Callable, final
+from __future__ import annotations
+
+from collections.abc import Callable
+from typing import TYPE_CHECKING, final
 
 import structlog
 
@@ -15,7 +18,6 @@ if TYPE_CHECKING:
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-
     # We use these formatters in our `'handlers'` configuration.
     # Probably, you won't need to modify these lines.
     # Unless, you know what you are doing.
@@ -36,7 +38,6 @@ LOGGING = {
             ],
         },
     },
-
     # You can easily swap `key/value` (default) output and `json` ones.
     # Use `'json_console'` if you need `json` logs.
     'handlers': {
@@ -49,15 +50,14 @@ LOGGING = {
             'formatter': 'json_formatter',
         },
     },
-
     # These loggers are required by our app:
     # - django is required when using `logger.getLogger('django')`
     # - security is required by `axes`
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'propagate': True,
             'level': 'INFO',
+            'propagate': True,
         },
         'security': {
             'handlers': ['console'],
@@ -69,17 +69,17 @@ LOGGING = {
 
 
 @final
-class LoggingContextVarsMiddleware(object):
+class LoggingContextVarsMiddleware:
     """Used to reset ContextVars in structlog on each request."""
 
     def __init__(
         self,
-        get_response: 'Callable[[HttpRequest], HttpResponse]',
+        get_response: Callable[[HttpRequest], HttpResponse],
     ) -> None:
         """Django's API-compatible constructor."""
         self.get_response = get_response
 
-    def __call__(self, request: 'HttpRequest') -> 'HttpResponse':
+    def __call__(self, request: HttpRequest) -> HttpResponse:
         """
         Handle requests.
 

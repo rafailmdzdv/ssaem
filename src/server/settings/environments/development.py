@@ -4,21 +4,23 @@ This file contains all the settings that defines the development server.
 SECURITY WARNING: don't run with debug turned on in production!
 """
 
+from __future__ import annotations
+
 import logging
 import socket
 from typing import TYPE_CHECKING
 
+from csp.constants import SELF
+from debug_toolbar.settings import PANELS_DEFAULTS
+
 from server.settings.components import config
+from server.settings.components.api import CORS_ALLOWED_ORIGINS
 from server.settings.components.common import (
     DATABASES,
     INSTALLED_APPS,
     MIDDLEWARE,
 )
-from server.settings.components.csp import (
-    CSP_CONNECT_SRC,
-    CSP_IMG_SRC,
-    CSP_SCRIPT_SRC,
-)
+from server.settings.components.csp import CONTENT_SECURITY_POLICY
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
@@ -41,11 +43,11 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS += (
     # Better debug:
     'debug_toolbar',
-    'nplusone.ext.django',
-
+    'zeal',
     # Linting migrations:
     'django_migration_linter',
-
+    # Detect unsafe migrations:
+    'django_safe_migrations',
     # django-test-migrations:
     'django_test_migrations.contrib.django_checks.AutoNames',
     # This check might be useful in production as well,
@@ -54,9 +56,12 @@ INSTALLED_APPS += (
     # This will check that your database is configured properly,
     # when you run `python manage.py check` before deploy.
     'django_test_migrations.contrib.django_checks.DatabaseConfiguration',
-
     # django-extra-checks:
     'extra_checks',
+    # django-query-counter:
+    'query_counter',
+    # django-drifter:
+    'drifter',
 )
 
 
@@ -65,55 +70,65 @@ INSTALLED_APPS += (
 
 MIDDLEWARE += (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-
-    # https://github.com/bradmontgomery/django-querycount
+    # https://github.com/conformist-mw/django-query-counter
     # Prints how many queries were executed, useful for the APIs.
-    'querycount.middleware.QueryCountMiddleware',
+    'query_counter.middleware.DjangoQueryCounterMiddleware',
 )
 
 # https://django-debug-toolbar.readthedocs.io/en/stable/installation.html#configure-internal-ips
 try:  # This might fail on some OS
     INTERNAL_IPS = [
-        '{0}.1'.format(ip[:ip.rfind('.')])
+        '{}.1'.format(ip[: ip.rfind('.')])
         for ip in socket.gethostbyname_ex(socket.gethostname())[2]
     ]
-except socket.error:  # pragma: no cover
+except OSError:  # pragma: no cover
     INTERNAL_IPS = []
 INTERNAL_IPS += ['127.0.0.1', '10.0.2.2']
 
 
-def _custom_show_toolbar(request: 'HttpRequest') -> bool:
+def _custom_show_toolbar(request: HttpRequest) -> bool:
     """Only show the debug toolbar to users with the superuser flag."""
     return DEBUG and request.user.is_superuser
 
 
+# This can be removed after `RedirectsPanel` will be gone:
+DEBUG_TOOLBAR_PANELS = PANELS_DEFAULTS.copy()
+DEBUG_TOOLBAR_PANELS.remove('debug_toolbar.panels.redirects.RedirectsPanel')
+
 DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK':
-        'server.settings.environments.development._custom_show_toolbar',
+    'SHOW_TOOLBAR_CALLBACK': (
+        'server.settings.environments.development._custom_show_toolbar'
+    ),
 }
 
 # This will make debug toolbar to work with django-csp,
 # since `ddt` loads some scripts from `ajax.googleapis.com`:
-CSP_SCRIPT_SRC += ('ajax.googleapis.com',)
-CSP_IMG_SRC += ('data:',)
-CSP_CONNECT_SRC += ("'self'",)
+_CSP_DIRECTIVES = CONTENT_SECURITY_POLICY['DIRECTIVES']
+_CSP_DIRECTIVES['script-src'] += ['https://ajax.googleapis.com']
+_CSP_DIRECTIVES['img-src'] += ['data:']
+_CSP_DIRECTIVES['connect-src'] += [SELF]
 
 
-# nplusone
-# https://github.com/jmcarp/nplusone
+# django-cors-headers
+
+CORS_ALLOWED_ORIGINS.extend([
+    'http://localhost',
+    'http://127.0.0.1',
+])
+
+
+# django-zeal
+# https://github.com/taobojlen/django-zeal
 
 # Should be the first in line:
-MIDDLEWARE = (  # noqa: WPS440
-    'nplusone.ext.django.NPlusOneMiddleware',
-) + MIDDLEWARE
+MIDDLEWARE = ('zeal.middleware.zeal_middleware', *MIDDLEWARE)
 
 # Logging N+1 requests:
-NPLUSONE_RAISE = True  # comment out if you want to allow N+1 requests
-NPLUSONE_LOGGER = logging.getLogger('django')
-NPLUSONE_LOG_LEVEL = logging.WARN
-NPLUSONE_WHITELIST = [
+ZEAL_RAISE = True  # comment out if you want to allow N+1 requests
+ZEAL_SHOW_ALL_CALLERS = True
+ZEAL_LOGGER = logging.getLogger('django')
+ZEAL_ALLOWLIST = [
     {'model': 'admin.*'},
-    {'model': 'days.StudyDay'},
 ]
 
 
@@ -121,9 +136,28 @@ NPLUSONE_WHITELIST = [
 # https://github.com/wemake-services/django-test-migrations
 
 # Set of badly named migrations to ignore:
-DTM_IGNORED_MIGRATIONS = frozenset((
-    ('axes', '*'),
-))
+DTM_IGNORED_MIGRATIONS = frozenset((('axes', '*'),))
+
+
+# django-migration-linter
+# https://github.com/3YOURMIND/django-migration-linter
+
+MIGRATION_LINTER_OPTIONS = {
+    'exclude_apps': ['axes'],
+    'exclude_migration_tests': ['CREATE_INDEX', 'CREATE_INDEX_EXCLUSIVE'],
+    'warnings_as_errors': True,
+}
+
+# django-safe-migrations
+# https://github.com/YasserShkeir/django-safe-migrations
+
+SAFE_MIGRATIONS = {
+    'EXCLUDED_APPS': ['axes'],
+    'DISABLED_RULES': [
+        'SM028',  # Prefer bigint over int
+    ],
+    'FAIL_ON_WARNING': True,
+}
 
 
 # django-extra-checks
@@ -133,8 +167,6 @@ EXTRA_CHECKS = {
     'checks': [
         # Forbid `unique_together`:
         'no-unique-together',
-        # Use the indexes option instead:
-        'no-index-together',
         # Each model must be registered in admin:
         'model-admin',
         # FileField/ImageField must have non empty `upload_to` argument:
@@ -156,5 +188,5 @@ EXTRA_CHECKS = {
 }
 
 # Disable persistent DB connections
-# https://docs.djangoproject.com/en/4.2/ref/databases/#caveats
+# https://docs.djangoproject.com/en/6.0/ref/databases/#caveats
 DATABASES['default']['CONN_MAX_AGE'] = 0
