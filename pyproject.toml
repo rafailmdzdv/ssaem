@@ -9,7 +9,7 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "^3.11"
 
-django = { version = "^5.0.0", extras = ["argon2"] }
+django = { version = "^6.0.0", extras = ["argon2"] }
 django-split-settings = "^1.2"
 django-axes = "^7.0.0"
 django-csp = "^3.7"
