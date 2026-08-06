@@ -32,7 +32,7 @@ drf-yasg = "^1.21.7"
 django-debug-toolbar = "^4.2"
 django-querycount = "^0.8"
 django-migration-linter = "^5.0"
-django-extra-checks = "^0.14.0"
+django-extra-checks = "^0.17.0"
 nplusone = "^1.0"
 
 wemake-python-styleguide = "^0.18"
