@@ -13,7 +13,7 @@ django = { version = "^5.0.0", extras = ["argon2"] }
 django-split-settings = "^1.2"
 django-axes = "^8.0.0"
 django-csp = "^3.7"
-django-health-check = "^3.16"
+django-health-check = "^4.0.0"
 django-http-referrer-policy = "^1.1"
 django-permissions-policy = "^4.18"
 django-stubs-ext = "^5.0.0"
