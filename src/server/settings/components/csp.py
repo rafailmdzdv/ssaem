@@ -8,12 +8,31 @@ We are using `django-csp` to provide these headers.
 Docs: https://github.com/mozilla/django-csp
 """
 
-from typing import Tuple
+from typing import TypedDict, final
+
+from csp.constants import NONE, SELF
+
+
+@final
+class _ContentSecurityPolicy(TypedDict):
+    EXCLUDE_URL_PREFIXES: list[str]  # noqa: WPS115
+    DIRECTIVES: dict[str, list[str]]  # noqa: WPS115
+
 
 # These values might and will be redefined in `development.py` env:
-CSP_SCRIPT_SRC: Tuple[str, ...] = ("'self'",)
-CSP_IMG_SRC: Tuple[str, ...] = ("'self'",)
-CSP_FONT_SRC: Tuple[str, ...] = ("'self'",)
-CSP_STYLE_SRC: Tuple[str, ...] = ("'self'",)
-CSP_DEFAULT_SRC: Tuple[str, ...] = ("'none'",)
-CSP_CONNECT_SRC: Tuple[str, ...] = ()
+CONTENT_SECURITY_POLICY: _ContentSecurityPolicy = {
+    'EXCLUDE_URL_PREFIXES': [
+        '/docs/stoplight/',
+        '/docs/swagger/',
+        '/docs/scalar/',
+        '/docs/redoc/',
+    ],
+    'DIRECTIVES': {
+        'default-src': [NONE],
+        'script-src': [SELF],
+        'style-src': [SELF],
+        'img-src': [SELF],
+        'font-src': [SELF],
+        'connect-src': [],
+    },
+}
