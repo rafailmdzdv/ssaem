@@ -28,7 +28,7 @@ www.{$DOMAIN_NAME} {
 				path /static/* /media/*
 			}
 			key {remote_host}
-			# TODO fix events and window for your requests
+			# fix events and window for your requests
 			events 100
 			window 10s
 		}
@@ -38,7 +38,7 @@ www.{$DOMAIN_NAME} {
 				not path /static/* /media/*
 			}
 			key {remote_host}
-			# TODO fix events and window for your requests
+			# fix events and window for your requests
 			events 10
 			window 3s
 		}

@@ -10,6 +10,6 @@ pytest_plugins = [
     # Should be the first custom one:
     'plugins.django_settings',
     'plugins.tracecov_map',
-    # TODO: add your own plugins here!
+    # add your own plugins here!
     'plugins.main.main_templates',
 ]

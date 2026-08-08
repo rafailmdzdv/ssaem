@@ -10,7 +10,7 @@ run_ci () {
   caddy validate --config "$CADDYFILE_PATH"
 
   # Checking formatting:
-  # TODO: we use this hack, because `caddy fmt` does not have `--check` arg.
+  # we use this hack, because `caddy fmt` does not have `--check` arg.
   old_caddyfile="$(md5sum "$CADDYFILE_PATH")"
 
   caddy fmt --overwrite "$CADDYFILE_PATH"

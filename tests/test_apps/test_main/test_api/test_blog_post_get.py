@@ -15,7 +15,7 @@ from server.apps.main.models import BlogPost
 @pytest.fixture
 def blog_post(faker: Faker) -> BlogPost:
     """Generate fake ``BlogPost`` instance."""
-    # TODO: this should be done with a model generator like
+    # this should be done with a model generator like
     # https://github.com/fcurella/django-fakery
     return BlogPost.objects.create(
         title=faker.name(),

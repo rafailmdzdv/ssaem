@@ -16,7 +16,7 @@ from server.settings.components.api import DMR_SETTINGS
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    # TODO: check production hosts
+    # check production hosts
     config('DOMAIN_NAME'),
     # We need this value for `healthcheck` to work:
     'localhost',
@@ -36,7 +36,7 @@ _COLLECTSTATIC_DRYRUN = config(
 # Adding STATIC_ROOT to collect static files via 'collectstatic':
 STATIC_ROOT = '.static' if _COLLECTSTATIC_DRYRUN else '/var/www/django/static'
 
-# TODO: convert to `STORAGES`
+# convert to `STORAGES`
 STATICFILES_STORAGE = (
     # This is a string, not a tuple,
     # but it does not fit into 80 characters rule.
