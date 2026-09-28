@@ -65,7 +65,7 @@ dev = [
     "dump-env>=1.5,<2",
     "ipython>=9.14,<10",
     "deptry>=0.25,<0.26",
-    "flake8-final>=0.0.3",
+    "flake8-final>=0.0.4",
 ]
 docs = [
     "sphinx>=9.1,<10",
