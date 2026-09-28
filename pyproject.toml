@@ -230,7 +230,6 @@ addopts = [
   "--tracecov-fail-under-responses=50",
 
   "--radar-endpoint=https://test-radar.ilaletdinov.ru",
-  "--radar-token=dev_lQSRaI_13iaTy63pfR8RE6hIMSH1mH-mlPiXFrr0V1M",
 ]
 
 # Fail on warnings:
