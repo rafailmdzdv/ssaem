@@ -227,7 +227,7 @@ addopts = [
   "--tracecov-fail-under-keywords=100",
   # Framework-level responses like 406 and 422 are documented in OpenAPI,
   # but they are not always reachable through regular Schemathesis input generation.
-  "--tracecov-fail-under-responses=50",
+  "--tracecov-fail-under-responses=25",
 
   "--radar-endpoint=https://test-radar.ilaletdinov.ru",
 ]

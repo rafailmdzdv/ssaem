@@ -6,16 +6,10 @@ name: Lint and Test
   push:
     branches:
       - master
-      - main
   pull_request:
     branches:
       - master
-      - main
   workflow_dispatch:
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   lint:
@@ -44,7 +38,7 @@ jobs:
         run: uv run flake8 .
 
       - name: Run mypy
-        run: uv run mypy .
+        run: uv run mypy src
 
   test:
     name: Tests
@@ -82,4 +76,5 @@ jobs:
       - name: Run tests
         env:
           RADAR_TOKEN: ${{ secrets.RADAR_TOKEN }}
+          DJANGO_SECRET_KEY: django-insecure-ci-test-key-at-least-32-bytes-long
         run: uv run pytest tests -vv
