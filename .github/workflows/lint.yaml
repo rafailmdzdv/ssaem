@@ -1,13 +1,21 @@
-name: Lint
+---
+
+name: Lint and Test
 
 'on':
   push:
     branches:
       - master
+      - main
   pull_request:
     branches:
       - master
+      - main
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lint:
@@ -36,4 +44,42 @@ jobs:
         run: uv run flake8 .
 
       - name: Run mypy
-        run: uv run mypy src
+        run: uv run mypy .
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_DB: ssaem
+          POSTGRES_USER: ssaem
+          POSTGRES_PASSWORD: ssaem
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ssaem -d ssaem"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.13"
+
+      - name: Set up environment config
+        run: cp config/.env.template config/.env
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run tests
+        env:
+          RADAR_TOKEN: ${{ secrets.RADAR_TOKEN }}
+        run: uv run pytest tests -vv
