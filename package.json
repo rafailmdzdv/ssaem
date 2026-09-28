@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@lingui/loader": "^6.6.0"
+    "@lingui/loader": "^6.6.0",
+    "fast-xml-parser": "^5.11.1"
   }
 }

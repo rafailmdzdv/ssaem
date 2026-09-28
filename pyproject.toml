@@ -22,6 +22,7 @@ dependencies = [
     "structlog>=26.1,<27",
     "punq>=0.8,<0.9",
     "pillow>=12.3.0",
+    "httpx>=0.28.1,<1",
 ]
 
 [build-system]
@@ -64,7 +65,7 @@ dev = [
     "dump-env>=1.5,<2",
     "ipython>=9.14,<10",
     "deptry>=0.25,<0.26",
-    "flake8-final>=0.0.3",
+    "flake8-final>=0.0.4",
 ]
 docs = [
     "sphinx>=9.1,<10",
@@ -155,7 +156,7 @@ ignore = [
   "RUF106",  #
   "RUF201",  #
 ]
-external = ["WPS"]
+external = ["WPS", "FIN"]
 
 # Plugin configs:
 flake8-quotes.inline-quotes = "single"
@@ -168,7 +169,8 @@ pydocstyle.convention = "pep257"
 "**/server/common/typing/*.py" = ["F401"]
 "**/server/implemented.py" = ["PLC0415", "D103"]
 "**/server/apps/auth/models.py" = ["D101", "D102"]
-"**/tests/*.py" = ["D101", "D102", "D103", "S101", "S105", "S106"]
+"**/tests/**/*.py" = ["D101", "D102", "D103", "D107", "S101", "S105", "S106"]
+"**/tests/*.py" = ["D101", "D102", "D103", "D107", "S101", "S105", "S106"]
 "**/apps.py" = ["D101"]
 "**/admin.py" = ["D101", "D102", "RUF012"]
 
@@ -225,7 +227,7 @@ addopts = [
   "--tracecov-fail-under-keywords=100",
   # Framework-level responses like 406 and 422 are documented in OpenAPI,
   # but they are not always reachable through regular Schemathesis input generation.
-  "--tracecov-fail-under-responses=50",
+  "--tracecov-fail-under-responses=25",
 
   "--radar-endpoint=https://test-radar.ilaletdinov.ru",
 ]

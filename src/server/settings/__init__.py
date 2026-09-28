@@ -31,6 +31,7 @@ _base_settings = (
     'components/csp.py',
     'components/caches.py',
     'components/api.py',
+    'components/llm.py',
     # Select the right env:
     f'environments/{_ENV}.py',
     # Optionally override some settings:

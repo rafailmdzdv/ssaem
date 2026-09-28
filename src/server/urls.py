@@ -24,6 +24,7 @@ from dmr.routing import Router, path
 from health_check.views import HealthCheckView
 
 from server.apps.auth import urls as auth_urls
+from server.apps.exercises import urls as exercise_urls
 
 admin.autodiscover()
 
@@ -32,6 +33,7 @@ router = Router(
     (
         auth_urls.auth_router.to_urlpatterns(namespace='auth'),
         auth_urls.user_router.to_urlpatterns(namespace='user'),
+        exercise_urls.exercise_router.to_urlpatterns(namespace='exercises'),
     ),
 )
 schema = build_schema(router)

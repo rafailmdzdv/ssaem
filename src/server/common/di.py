@@ -7,8 +7,7 @@ from typing import Any, final
 import punq
 
 
-@final
-class HasContainer:
+class HasContainer:  # noqa: FIN100
     """
     Base class for all parts that use ``resolve()`` function.
 

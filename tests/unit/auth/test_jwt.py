@@ -3,12 +3,12 @@
 
 from datetime import timedelta
 
-from jwt.exceptions import InvalidKeyError
 import pytest
 from django.conf import settings
 from django.utils import timezone
 from dmr.exceptions import NotAuthenticatedError
 from dmr.security.jwt.token import JWToken
+from jwt.exceptions import InvalidKeyError
 
 _ALGORITHM = 'HS256'
 
