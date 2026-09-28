@@ -3,8 +3,11 @@
 
 from typing import Final, final
 
+from django.contrib.auth import get_user_model
 from dmr.security.jwt import JWTSyncAuth
 from dmr.security.jwt.blocklist import JWTokenBlocklistSyncMixin
+
+User = get_user_model()
 
 
 @final

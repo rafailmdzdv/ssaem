@@ -11,7 +11,8 @@ from django.utils import timezone
 from dmr import Body, Controller, modify
 from dmr.parsers import MultiPartParser
 from dmr.plugins.msgspec import MsgspecSerializer
-from dmr.security.jwt import JWTSyncAuth, request_jwt
+from dmr.security import AuthenticatedHttpRequest
+from dmr.security.jwt import request_jwt
 from dmr.security.jwt.views import (
     ObtainTokensPayload as DmrObtainTokensPayload,
 )
@@ -139,9 +140,10 @@ class LogoutController(Controller[MsgspecSerializer]):
 class UserController(Controller[MsgspecSerializer]):
     """Acquire user information."""
 
-    auth = (JWTSyncAuth(),)
+    request: AuthenticatedHttpRequest[User]
+    auth = (jwt_blocklist_auth,)
 
-    def get(self) -> UserResponse:
+    def get(self) -> UserResponse | None:
         """Retrieve user information."""
         return {
             'email': self.request.user.email,
@@ -159,7 +161,8 @@ class UserController(Controller[MsgspecSerializer]):
 class UpdateUserController(Controller[MsgspecSerializer]):
     """Update user fields."""
 
-    auth = (JWTSyncAuth(),)
+    request: AuthenticatedHttpRequest[User]
+    auth = (jwt_blocklist_auth,)
 
     def patch(self, parsed_body: Body[UpdateUserPayload]) -> UpdateUserResponse:
         """Update user information."""
@@ -172,7 +175,8 @@ class UpdateUserAvatarController(Controller[MsgspecSerializer]):
     """Update the user avatar."""
 
     parsers = (MultiPartParser(),)
-    auth = (JWTSyncAuth(),)
+    request: AuthenticatedHttpRequest[User]
+    auth = (jwt_blocklist_auth,)
 
     def post(self) -> UploadAvatarResponse:
         """Upload the new user avatar."""

@@ -9,7 +9,7 @@ from server.apps.auth import models
 
 
 @final
-class UploadAvatarForm(forms.ModelForm):
+class UploadAvatarForm(forms.ModelForm[models.User]):
     """Form used to upload a user's avatar."""
 
     @final

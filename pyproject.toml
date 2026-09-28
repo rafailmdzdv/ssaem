@@ -22,6 +22,7 @@ dependencies = [
     "structlog>=26.1,<27",
     "punq>=0.8,<0.9",
     "pillow>=12.3.0",
+    "httpx>=0.28.1,<1",
 ]
 
 [build-system]
@@ -155,7 +156,7 @@ ignore = [
   "RUF106",  #
   "RUF201",  #
 ]
-external = ["WPS"]
+external = ["WPS", "FIN"]
 
 # Plugin configs:
 flake8-quotes.inline-quotes = "single"
@@ -168,7 +169,8 @@ pydocstyle.convention = "pep257"
 "**/server/common/typing/*.py" = ["F401"]
 "**/server/implemented.py" = ["PLC0415", "D103"]
 "**/server/apps/auth/models.py" = ["D101", "D102"]
-"**/tests/*.py" = ["D101", "D102", "D103", "S101", "S105", "S106"]
+"**/tests/**/*.py" = ["D101", "D102", "D103", "D107", "S101", "S105", "S106"]
+"**/tests/*.py" = ["D101", "D102", "D103", "D107", "S101", "S105", "S106"]
 "**/apps.py" = ["D101"]
 "**/admin.py" = ["D101", "D102", "RUF012"]
 
@@ -228,6 +230,7 @@ addopts = [
   "--tracecov-fail-under-responses=50",
 
   "--radar-endpoint=https://test-radar.ilaletdinov.ru",
+  "--radar-token=dev_lQSRaI_13iaTy63pfR8RE6hIMSH1mH-mlPiXFrr0V1M",
 ]
 
 # Fail on warnings:

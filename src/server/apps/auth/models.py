@@ -22,28 +22,28 @@ class UserManager(BaseUserManager['User']):
         self,
         email: str,
         password: str,
-        **extra_fields: bool,
-    ) -> None:
+        **extra_fields: object,
+    ) -> 'User':
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
-        self._create_user_object(email, password, **extra_fields)
+        return self._create_user_object(email, password, **extra_fields)
 
     def create_superuser(
         self,
         email: str,
         password: str,
-        **extra_fields: bool,
-    ) -> None:
+        **extra_fields: object,
+    ) -> 'User':
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        self._create_user_object(email, password, **extra_fields)
+        return self._create_user_object(email, password, **extra_fields)
 
     def _create_user_object(
         self,
         email: str,
         password: str,
-        **extra_fields: bool,
-    ) -> AbstractBaseUser:
+        **extra_fields: object,
+    ) -> 'User':
         user = self.model(
             email=email,
             **extra_fields,
